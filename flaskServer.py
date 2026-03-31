@@ -5,6 +5,10 @@ from flask import Flask
 from flask import jsonify
 app = Flask(__name__)
 
+#allows for easier starting of flask from start file
+def run_flask():
+    app.run(debug=True, port=5000, use_reloader=False)
+
 @app.route("/time")
 def get_time():
     clock = clockWidget()
