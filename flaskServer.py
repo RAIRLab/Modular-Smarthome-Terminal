@@ -20,6 +20,10 @@ def clientHome():
     clock = clockWidget()
     current_time = clock.update()
     return render_template("index.html", time=current_time)
+  
+@app.route("/settings")
+def settings():
+    return render_template("settingspage.html")
 
 # Slated for removal-- starting through start.py now
 if __name__ == '__main__':
