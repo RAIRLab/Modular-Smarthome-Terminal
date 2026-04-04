@@ -1,13 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Smarthome Terminal</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='stylesheet.css') }}">
 </head>
+
 <body>
-    <center><h1>Hello This is the placeholder for the <b>index.html</b></h1></center>
+<!--<center>
+        <h1>Hello This is the placeholder for the <b>index.html</b></h1>
+    </center>
+-->
     <div class="grid-container">
         <div class="clock-widget">
             <span id="clock">Loading...</span>
@@ -20,37 +25,45 @@
         <div class="grid-box">Box 3</div>
         <div class="grid-box">Box 4</div>
         <div class="grid-box">Box 5</div>
-        <div class="grid-box">Box 6</div>     
-        <div class="grid-box">Box 7</div>     
-        <div class="grid-box">Box 8</div>   
-        <div class="grid-box">Box 9</div>       
+        <div class="grid-box">Box 6</div>
+        <div class="grid-box">Box 7</div>
+        <div class="grid-box">Box 8</div>
+        <div class="grid-box">Box 9</div>
     </div>
 </body>
+
 </html>
 
 <script>
-async function updateClock() {
-    const response = await fetch("/time");
-    const data = await response.json();
+    async function updateClock() {
+        const response = await fetch("/time");
+        const data = await response.json();
 
-    document.getElementById("clock").innerText = data.time;
-}
+        document.getElementById("clock").innerText = data.time;
+    }
 
-// update every 1 second
-setInterval(updateClock, 1000);
+    // update every 1 second
+    setInterval(updateClock, 1000);
 
-// run once immediately
-updateClock();
+    // run once immediately
+    updateClock();
 
-async function updateTemp(){
-    const response = await fetch("/temp")
-    const data = await response.json();
+    //TEMPERATURE
+    async function updateTemp() {
+        try {
+            //temperature" to match flaskServer.py
+            const response = await fetch("/temperature");
+            const data = await response.json();
 
-    document.getElementById("temp").innerText = data.temp;
-}
-
-setInterval(updateTemp, 2000);
-updateTemp();
+            // data.temp contains the formatted string from tempSensorWidget.update()
+            document.getElementById("temp").innerText = data.temp;
+        } catch (error) {
+            console.error("Error updating temperature:", error);
+        }
+    }
+    // Update Temperature every 2 seconds
+    setInterval(updateTemp, 2000);
+    updateTemp();
 </script>
 
 </body>
