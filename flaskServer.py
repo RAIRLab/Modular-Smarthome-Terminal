@@ -14,6 +14,7 @@ app = Flask(__name__)
 #######PLUGINS#######
 app.register_blueprint(clock_bp)
 app.register_blueprint(fTemp_bp)
+app.register_blueprint(weather_bp)
 
 
 

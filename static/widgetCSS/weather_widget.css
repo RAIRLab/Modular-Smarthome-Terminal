@@ -1,0 +1,79 @@
+/* Weather Card Container */
+.weather-card {
+    border-radius: 15px;
+    color: #eceff4;
+    text-align: center;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    border: 1px solid #4c566a;
+    
+    /* Make it fill the grid box */
+    width: 50vh;
+    height: 100%;
+    overflow: hidden;
+    
+    /* Use Flexbox to distribute content vertically */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around; 
+    padding: 1vh; /* Relative padding */
+    box-sizing: border-box;
+}
+
+/* City Name Header */
+.city-name {
+    font-size: 1.5rem; /* Scales well, or use 2.5vh */
+    font-weight: 600;
+    color: #d8dee9;
+}
+
+/* Big Current Temp */
+.current-temp {
+    /* vmin ensures text scales relative to the smaller screen dimension */
+    font-size: 8vmin; 
+    font-weight: bold;
+    color: #00d9ff; 
+    text-shadow: 0 0 30px rgba(0, 217, 255, 0.3);
+    margin: 0;
+}
+
+/* Weather Description */
+.condition {
+    text-transform: capitalize;
+    font-style: italic;
+    color: whitesmoke;
+    font-size: 1.1rem;
+}
+
+/* High/Low Row */
+.temp-range {
+    display: flex;
+    justify-content: space-around;
+    font-size: 1.2rem;
+    border-top: 1px solid #4c566a;
+    padding-top: 1vh;
+}
+
+.high { 
+    color: #cb4552; 
+    font-weight: bold;
+}
+
+.low { 
+    color: #5b93ca; 
+    font-weight: bold;
+}
+
+/* Icon Styling */
+.weather-icon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.weather-icon img {
+    /* Scale icon relative to box height */
+    height: 10vh; 
+    width: auto;
+    filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.2));
+    border-radius: 15px;
+}
