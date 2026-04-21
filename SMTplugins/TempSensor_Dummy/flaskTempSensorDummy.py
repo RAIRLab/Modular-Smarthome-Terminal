@@ -1,11 +1,11 @@
-from temperature_sensor_widget import tempSensorWidget
+from SMTplugins.TempSensor_Dummy.temperature_sensor_widget import tempSensorWidget
 from flask import jsonify, Blueprint
 import os
 import json
 
 fTemp_bp = Blueprint('FakeTeperature', __name__)
 
-DATA_FILE = "sensor_data.json"
+DATA_FILE = "SMTplugins\TempSensor_Dummy\sensor_data.json"
 
 @fTemp_bp.route("/temperature")
 def get_temp():
