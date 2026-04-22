@@ -15,6 +15,14 @@
       "css_name": "temperature_sensor_widget.css",
       "row": 1,
       "col": 2
+    },
+    {
+      "id": "weather",
+      "name": "Weather",
+      "class": "weather-widget",
+      "css_name": "weather_widget.css",
+      "row": 1,
+      "col": 3
     }
   ]
 }
