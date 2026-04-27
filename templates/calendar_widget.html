@@ -1,0 +1,240 @@
+<!-- templates/calendar_widget.html -->
+<!-- Drop this file into your Flask templates folder.
+     Rendered via: render_template("calendar_widget.html", data=widget.widgetData) -->
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+  .cal-widget {
+    --cal-bg:        #0f0f14;
+    --cal-surface:   #1a1a24;
+    --cal-border:    #2a2a3a;
+    --cal-accent:    #7c6af7;
+    --cal-accent2:   #c084fc;
+    --cal-today-bg:  #7c6af7;
+    --cal-text:      #e8e6f0;
+    --cal-muted:     #5a5870;
+    --cal-event:     #2d2b40;
+    --cal-dot:       #c084fc;
+    --cal-radius:    14px;
+    --cal-font-head: 'DM Serif Display', serif;
+    --cal-font-mono: 'DM Mono', monospace;
+
+    background: var(--cal-bg);
+    border: 1px solid var(--cal-border);
+    border-radius: var(--cal-radius);
+    padding: 20px;
+    min-width: 280px;
+    max-width: 340px;
+    font-family: var(--cal-font-mono);
+    color: var(--cal-text);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.05);
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Subtle top gradient glow */
+  .cal-widget::before {
+    content: '';
+    position: absolute;
+    top: -40px; left: 50%;
+    transform: translateX(-50%);
+    width: 200px; height: 80px;
+    background: radial-gradient(ellipse, rgba(124,106,247,0.18) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  /* ── Header ── */
+  .cal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 18px;
+  }
+
+  .cal-month-name {
+    font-family: var(--cal-font-head);
+    font-size: 1.5rem;
+    letter-spacing: 0.01em;
+    background: linear-gradient(135deg, var(--cal-text) 40%, var(--cal-accent2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .cal-year {
+    font-size: 0.72rem;
+    color: var(--cal-muted);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  /* ── Day headers ── */
+  .cal-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 3px;
+  }
+
+  .cal-day-header {
+    text-align: center;
+    font-size: 0.6rem;
+    letter-spacing: 0.1em;
+    color: var(--cal-muted);
+    padding-bottom: 8px;
+    text-transform: uppercase;
+  }
+
+  /* ── Day cells ── */
+  .cal-day {
+    position: relative;
+    aspect-ratio: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    cursor: default;
+    transition: background 0.15s ease;
+  }
+
+  .cal-day:hover {
+    background: var(--cal-event);
+  }
+
+  .cal-day.out-of-month .cal-day-num {
+    color: var(--cal-muted);
+    opacity: 0.4;
+  }
+
+  .cal-day-num {
+    font-size: 0.75rem;
+    font-weight: 500;
+    line-height: 1;
+  }
+
+  /* Today highlight */
+  .cal-day.today {
+    background: var(--cal-today-bg);
+    box-shadow: 0 0 12px rgba(124,106,247,0.45);
+  }
+
+  .cal-day.today .cal-day-num {
+    color: #fff;
+    font-weight: 500;
+  }
+
+  /* Event dot */
+  .cal-event-dot {
+    width: 4px; height: 4px;
+    border-radius: 50%;
+    background: var(--cal-dot);
+    margin-top: 3px;
+    flex-shrink: 0;
+  }
+
+  .cal-day.today .cal-event-dot {
+    background: rgba(255,255,255,0.8);
+  }
+
+  /* ── Event list below grid ── */
+  .cal-events-section {
+    margin-top: 16px;
+    border-top: 1px solid var(--cal-border);
+    padding-top: 12px;
+  }
+
+  .cal-events-title {
+    font-size: 0.6rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--cal-muted);
+    margin-bottom: 8px;
+  }
+
+  .cal-event-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 10px;
+    background: var(--cal-event);
+    border-left: 2px solid var(--cal-accent);
+    border-radius: 0 6px 6px 0;
+    margin-bottom: 5px;
+    font-size: 0.7rem;
+    color: var(--cal-text);
+    animation: cal-slide-in 0.25s ease forwards;
+  }
+
+  .cal-event-date-badge {
+    font-size: 0.6rem;
+    color: var(--cal-accent2);
+    white-space: nowrap;
+  }
+
+  .cal-no-events {
+    font-size: 0.68rem;
+    color: var(--cal-muted);
+    font-style: italic;
+  }
+
+  @keyframes cal-slide-in {
+    from { opacity: 0; transform: translateX(-6px); }
+    to   { opacity: 1; transform: translateX(0); }
+  }
+</style>
+
+<div class="cal-widget">
+  <div class="cal-header">
+    <span class="cal-month-name">{{ data.month_name }}</span>
+    <span class="cal-year">{{ data.year }}</span>
+  </div>
+
+  <div class="cal-grid">
+    <!-- Day-of-week headers -->
+    {% for header in data.day_headers %}
+      <div class="cal-day-header">{{ header }}</div>
+    {% endfor %}
+
+    <!-- Day cells -->
+    {% for week in data.weeks %}
+      {% for day in week %}
+        <div class="cal-day
+          {% if not day.in_month %}out-of-month{% endif %}
+          {% if day.is_today %}today{% endif %}"
+          title="{{ day.date_str }}{% if day.events %}: {{ day.events | join(', ') }}{% endif %}">
+          <span class="cal-day-num">{{ day.day }}</span>
+          {% if day.events %}
+            <div class="cal-event-dot"></div>
+          {% endif %}
+        </div>
+      {% endfor %}
+    {% endfor %}
+  </div>
+
+  <!-- Today's events -->
+  <div class="cal-events-section">
+    <div class="cal-events-title">Today</div>
+    {% set today_events = [] %}
+    {% for week in data.weeks %}
+      {% for day in week %}
+        {% if day.is_today and day.events %}
+          {% for e in day.events %}
+            {% set _ = today_events.append(e) %}
+          {% endfor %}
+        {% endif %}
+      {% endfor %}
+    {% endfor %}
+
+    {% if today_events %}
+      {% for event in today_events %}
+        <div class="cal-event-item">
+          <span>{{ event }}</span>
+        </div>
+      {% endfor %}
+    {% else %}
+      <div class="cal-no-events">No events today</div>
+    {% endif %}
+  </div>
+</div>
