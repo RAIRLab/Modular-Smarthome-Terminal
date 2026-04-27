@@ -45,7 +45,7 @@
        "name": "Spotify",
        "class": "spotify-widget",
        "css_name": "spotify_widget.css",
-       "row": 2,
+       "row": 3,
        "col": 2
        }
   ]
