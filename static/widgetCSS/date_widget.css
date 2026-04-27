@@ -1,0 +1,20 @@
+.date-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    color: white;
+    text-align: center;
+}
+
+.date-month,
+.date-day,
+.date-year {
+    font-size: 40px;   /* SAME SIZE for all */
+    font-weight: bold;
+}
+
+.date-day {
+    margin: 10px 0;    /* spacing so it sits nicely in middle */
+}
