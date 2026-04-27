@@ -17,8 +17,9 @@ export async function updateTasks() {
             html += `<li class="task-item" data-id="${task.id}" style="cursor:pointer;">${task.title}</li>`;
         });
 
-        html += `</ul></div>`;
+        html += `</ul><button class="refresh-pill" type="button" onclick="location.reload()">REFRESH</button></div>`;
         container.innerHTML = html;
+        
 
         // Add Click Functionality
         document.querySelectorAll('.task-item').forEach(item => {
@@ -45,5 +46,5 @@ export async function updateTasks() {
     }
 }
 
-setInterval(updateTasks, 60000);
+setInterval(updateTasks, 60000); //60 sec update interval
 updateTasks();

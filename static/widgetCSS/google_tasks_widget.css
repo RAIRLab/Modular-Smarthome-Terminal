@@ -1,7 +1,7 @@
 /* Container for the Google Tasks Widget */
 .tasks-container {
     width: 30vw;
-    height: 35vh;
+    height: 25vh;
     display: flex;
     flex-direction: column;
     background: rgba(46, 52, 64, 0.8); /* Nord Dark Background */
@@ -71,4 +71,19 @@
 .tasks-list::-webkit-scrollbar-thumb {
     background: #4c566a;
     border-radius: 10px;
+}
+
+.refresh-pill {
+    align-self: center;
+    margin-top: auto;
+    width: 75%;
+    padding: 12px 24px;
+    border-radius: 50px; /* High value creates the pill shape */
+    border: none;
+    background-color: rgba(76, 86, 106, 0.8);;
+    color: #88c0d0;
+    font-size: 16px;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1); /* Adds a subtle shadow */
+    font-weight: bolder;
 }

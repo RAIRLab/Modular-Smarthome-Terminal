@@ -39,8 +39,8 @@
       "name": "Google Tasks",
       "class": "googleTasks-widget",
       "css_name": "google_tasks_widget.css",
-      "row": 2,
-      "col": 2      
+      "row": 3,
+      "col": 3      
     }
   ]
 }

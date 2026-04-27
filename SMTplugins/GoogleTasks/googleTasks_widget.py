@@ -7,7 +7,7 @@ from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
 
-SCOPES = ['https://www.googleapis.com/auth/tasks.readonly']
+SCOPES = ['https://www.googleapis.com/auth/tasks']
 
 class GoogleTasksWidget(Widget):
 
@@ -35,11 +35,12 @@ class GoogleTasksWidget(Widget):
     def handle_event(self, event, args):
         return None
 
-    def update(self):
+    def get_service(self):
+        """Helper to get the authenticated Google Tasks service."""
         creds = None
-        # Token file stores user's access/refresh tokens
-        token_path = 'SMTplugins/GoogleTasks/token.json'
-        creds_path = 'SMTplugins/GoogleTasks/credentials.json'
+        # Use absolute or relative paths consistent with your SMT structure
+        token_path = os.path.join("SMTplugins", "GoogleTasks", "token.json")
+        creds_path = os.path.join("SMTplugins", "GoogleTasks", "credentials.json")
 
         if os.path.exists(token_path):
             creds = Credentials.from_authorized_user_file(token_path, SCOPES)
@@ -53,22 +54,26 @@ class GoogleTasksWidget(Widget):
             with open(token_path, 'w') as token:
                 token.write(creds.to_json())
 
-        try:
-            service = build('tasks', 'v1', credentials=creds)
-        
-            # 1. Fetch the List Metadata
-            list_info = service.tasklists().get(tasklist='@default').execute()
-            list_name = list_info.get('title', 'Unknown List')
+        return build('tasks', 'v1', credentials=creds)
 
-            # 2. Fetch the Tasks
+    def update(self):
+        """Fetches list name and tasks to match JS expectation."""
+        try:
+            service = self.get_service()
+            
+            # Fetch List Name (Default list)
+            list_info = service.tasklists().get(tasklist='@default').execute()
+            list_name = list_info.get('title', 'My Tasks')
+
+            # Fetch Tasks (Not completed)
             results = service.tasks().list(tasklist='@default', showCompleted=False).execute()
             items = results.get('items', [])
             
-            # Return a dictionary containing both the name and the items
+            # Formatting to match: data.tasks and data.list_name
             return {
                 "list_name": list_name,
                 "tasks": [{"id": t['id'], "title": t['title']} for t in items]
-                }
+            }
         except Exception as e:
-            print(f"Tasks error: {e}")
-            return []
+            print(f"Google Tasks update error: {e}")
+            return {"list_name": "Sync Error", "tasks": []}

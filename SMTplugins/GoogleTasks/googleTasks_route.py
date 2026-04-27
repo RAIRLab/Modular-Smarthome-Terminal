@@ -14,12 +14,27 @@ def get_google_tasks():
 
 @googleTasks_bp.route('/api/google/tasks/complete', methods=['POST'])
 def complete_task():
-    task_id = request.json.get('task_id')
+    data = request.get_json()
+    task_id = data.get('task_id')
+    
     if not task_id:
         return jsonify({"error": "No task ID provided"}), 400
 
-    # Logic to mark task as completed in Google
-    service = tasks.get_service() # Helper method to get the 'build' object
-    service.tasks().patch(tasklist='@default', task=task_id, body={'status': 'completed'}).execute()
-    
-    return jsonify({"status": "success"})
+    try:
+        service = tasks.get_service()
+        if not service:
+            return jsonify({"error": "Authentication failed"}), 401
+
+        # Use patch to update the status to 'completed'
+        # Google requires the task ID and the '@default' list ID
+        service.tasks().patch(
+            tasklist='@default', 
+            task=task_id, 
+            body={'status': 'completed'}
+        ).execute()
+        
+        return jsonify({"status": "success", "message": "Task marked as completed"})
+
+    except Exception as e:
+        print(f"Error completing task: {e}")
+        return jsonify({"error": "Failed to update task on Google server", "details": str(e)}), 500
