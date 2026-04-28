@@ -5,3 +5,4 @@ import {} from './plugins/weather_script.js'
 import {} from './plugins/timeZone_script.js'
 import {} from './plugins/tasks_script.js'
 import './plugins/spotify_script.js';           
+import './plugins/fakeLight_script.js';
