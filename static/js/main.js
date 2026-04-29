@@ -14,3 +14,5 @@ updateClock();
 updateCalendar();
 updatePackages();
 import './plugins/fakeLight_script.js';
+
+import './plugins/blackjack_script.js'

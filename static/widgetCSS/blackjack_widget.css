@@ -1,0 +1,101 @@
+/* Container styling to match SMT aesthetic */
+#bj-container {
+    display:flex;
+    flex-direction: column;
+    background-color: #1a472a; /* Deep casino green */
+    border-radius: 12px;
+    padding: 15px;
+    color: white;
+    text-align: center;
+    box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
+    width: 100%;
+    height: fit-content
+}
+
+.bj-area {
+    margin-bottom: 10px;
+}
+
+.bj-label {
+    font-size: 25px;
+    font-weight: bold;
+    /*margin-bottom: 8px;*/
+    display: block;
+}
+
+/* Card Area Layout */
+#bj-dealer-cards, #bj-player-cards {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    min-height: 110px; /* Prevents layout jump when cards appear */
+    margin-top: 10px;
+}
+
+/* Individual Card Styling */
+.bj-card {
+    width: 70px;
+    height: 100px;
+    background-color: white; /* White box card */
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.8rem;
+    font-weight: 900;
+    box-shadow: 3px 3px 6px rgba(0,0,0,0.4);
+    transition: transform 0.2s ease;
+}
+
+.bj-card:hover {
+    transform: translateY(-5px);
+}
+
+/* Card Suit Colors as requested */
+.bj-card.red {
+    color: #d32f2f; /* Red for Hearts/Diamonds */
+}
+
+.bj-card.black {
+    color: #212121; /* Black for Spades/Clubs */
+}
+
+/* Controls and Buttons */
+.bj-controls {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    /*margin-top: 15px;*/
+}
+
+.bj-controls button {
+    background-color: #ffffff;
+    color: #1a472a;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    font-weight: bold;
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: background-color 0.2s;
+    font-size: 32px;
+}
+
+.bj-controls button:hover:not(:disabled) {
+    background-color: #e0e0e0;
+}
+
+.bj-controls button:disabled {
+    background-color: #555;
+    color: #888;
+    cursor: not-allowed;
+}
+
+/* Message / Game Status */
+#bj-status {
+    
+    font-style: italic;
+    font-weight: bold;
+    color: #ffeb3b; /* Gold/Yellow status text */
+    font-size: 25px;
+}
