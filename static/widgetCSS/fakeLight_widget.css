@@ -1,0 +1,60 @@
+.light-card {
+    width: fit-content;
+    height: fit-content;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border-radius: 15px;
+    background: rgba(46, 52, 64, 0.8);
+    border: 1px solid #4c566a;
+    transition: all 0.3s ease;
+    overflow: hidden;
+}
+
+/* Glow effect when the light is ON */
+.light-card.on {
+    background: rgba(136, 192, 208, 0.2);
+    border: 1px solid #88c0d0;
+    box-shadow: 0 0 20px rgba(136, 192, 208, 0.4);
+}
+
+.light-label { 
+    color: #d8dee9;
+    font-size: 28px; 
+    /*margin-bottom: 5px;*/
+    padding: 10px;
+}
+
+.light-status {
+    font-size: 40px;
+    font-weight: bold;
+    color: #eceff4;
+    /*margin-bottom: 15px;*/
+}
+
+.on .light-status { color: #ebcb8b; } /* Warm Yellow for ON */
+
+.switch-btn {
+    /*padding: 10px 20px;*/
+    border-radius: 8px;
+    border: none;
+    background: #4c566a;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.2s;
+    
+    margin-bottom: 10px;
+    font-size: 30px;
+
+}
+
+.switch-btn:hover { background: #5e81ac; }
+
+.light-icon img{
+    height: fit-content;
+    width: fit-content;
+    height: 17vh;
+    width: auto;
+}

@@ -3,24 +3,19 @@
     border-radius: 15px;
     color: #eceff4;
     text-align: center;
-    /*box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-    /*border: 1px solid #4c566a;*/
     width: 30vw;
     height: 20vh;
     overflow: hidden;
-    
-    /* Use Flexbox to distribute content vertically */
     display: flex;
     flex-direction: row;
     justify-content: center; 
     align-items: center;
-    /*padding: 1vh; /* Relative padding */
     box-sizing: border-box;
 }
 
 /* City Name Header */
 .city-name {
-    font-size: 2rem; 
+    font-size: 40px; 
     font-weight: 600;
     color: #d8dee9;
     margin: 10px;
@@ -28,7 +23,7 @@
 
 /* Big Current Temp */
 .current-temp {
-    font-size: 8vmin; 
+    font-size: 95px; 
     font-weight: bold;
     color: #00d9ff; 
     text-shadow: 0 0 30px rgba(0, 217, 255, 0.3);
@@ -40,25 +35,25 @@
     text-transform: capitalize;
     font-style: italic;
     color: whitesmoke;
-    font-size: 1.6rem;
+    font-size: 32px;
 }
 
 /* High/Low Row */
 .temp-range {
     display: flex;
     justify-content: space-around;
-    font-size: 2rem;
-    /*border-top: 1px solid #4c566a;*/
+    font-size: 32px;
     padding-top: 1vh;
     align-items: center;
+    flex-direction: column;
 }
 
-.high { 
+.low { 
     color: #cb4552; 
     font-weight: bold;
 }
 
-.low { 
+.high { 
     color: #5b93ca; 
     font-weight: bold;
 }
