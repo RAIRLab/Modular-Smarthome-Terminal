@@ -72,6 +72,19 @@
     font-weight: bold;
 }
 
+.login {
+    background: #2a2a2a;
+    color: white;
+    border: none;
+    border-radius: 10%;
+    width: fit-content;
+    height: fit-content;
+    min-width: 50px;
+    min-height: 50px;
+    cursor: pointer;
+    font-size: 32px;
+}
+
 /* Buttons */
 .spotify-controls button {
     background: #2a2a2a;
