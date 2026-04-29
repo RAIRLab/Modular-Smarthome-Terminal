@@ -1,5 +1,11 @@
 document.addEventListener("DOMContentLoaded", () => {
     loadLayout();
+
+    const resetButton = document.getElementById("reset-layout-btn");
+
+    if (resetButton) {
+        resetButton.addEventListener("click", resetLayout);
+    }
 });
 
 async function loadLayout() {
@@ -8,11 +14,10 @@ async function loadLayout() {
 
     const widgets = data.widgets;
 
-    // Fill all dropdowns
     for (let i = 1; i <= 9; i++) {
         const select = document.getElementById("box" + i);
+        if (!select) continue;
 
-        // clear existing
         select.innerHTML = "";
 
         widgets.forEach(w => {
@@ -23,13 +28,20 @@ async function loadLayout() {
         });
     }
 
-    // Set current layout
     widgets.forEach(w => {
-        const position = (w.row - 1) * 3 + w.col; // converts row/col → box #
-        const select = document.getElementById("box" + position);
+        const boxNumber = (w.row - 1) * 3 + w.col;
+        const select = document.getElementById("box" + boxNumber);
 
         if (select) {
             select.value = w.id;
         }
     });
+}
+
+async function resetLayout() {
+    await fetch("/api/layout/default", {
+        method: "POST"
+    });
+
+    await loadLayout();
 }
