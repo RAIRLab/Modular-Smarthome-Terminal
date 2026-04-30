@@ -198,7 +198,6 @@ updateCalendar().then(() => {
 
 // update every 60s
 setInterval(updateCalendar, 60000);
-
 // make button work globally
 window.addTask = addTask;
 window.deleteTask = deleteTask;

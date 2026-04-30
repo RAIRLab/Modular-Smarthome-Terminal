@@ -1,18 +1,26 @@
+.widget-Calendar{
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    width: 100%;
+    height: auto;
+}
 .calendar-widget {
     display: flex;
-    justify-content: center;
-    align-items: center;
-    width: fit-content;
-    height: fit-content;
+    flex-direction: column; /* Changed to column to allow sections to stack properly */
+    width: fit-content;           /* Fill parent width */
+    height: fit-content;          /* Allow height to grow with content */
     background: rgba(20, 20, 20, 0.8);
     border-radius: 12px;
     border: 1px solid rgba(255, 255, 255, 0.1);
     overflow: hidden;
+    box-sizing: border-box;
+
 }
 
 #calendar {
-    width: fit-content;
-    height: fit-content;
+    width: 100%;           
+    height: auto;
     padding: 16px;
     box-sizing: border-box;
     font-family: 'Geist Mono', monospace;
@@ -24,6 +32,7 @@
     justify-content: space-between;
     align-items: baseline;
     margin-bottom: 12px;
+    width: 100%;
 }
 
 .cal-month-name {
@@ -42,8 +51,9 @@
 
 .cal-grid {
     display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    gap: 2px;
+    grid-template-columns: repeat(7, 1fr); /* 7 equal columns across the full width */
+    gap: 4px; /* Slightly increased gap for a cleaner look on wide screens */
+    width: 100%;
 }
 
 .cal-day-header {
@@ -56,7 +66,8 @@
 }
 
 .cal-day {
-    aspect-ratio: 1;
+    /* aspect-ratio: 1; -> Keep this to ensure days stay square as they get wider */
+    aspect-ratio: 1; 
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -64,6 +75,7 @@
     border-radius: 6px;
     cursor: default;
     transition: background 0.15s ease;
+    width: 100%; /* Ensure the div fills its grid cell */
 }
 
 .cal-day:hover {
@@ -104,7 +116,9 @@
 .cal-events-section {
     margin-top: 10px;
     border-top: 1px solid rgba(255, 255, 255, 0.1);
-    padding-top: 8px;
+    padding: 12px 16px; /* Added horizontal padding to match #calendar */
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .cal-events-title {
@@ -118,12 +132,13 @@
 .cal-event-item {
     display: flex;
     align-items: center;
-    padding: 4px 8px;
+    justify-content: space-between;
+    padding: 6px 10px; /* Slightly more padding for the wider view */
     background: rgba(0, 255, 153, 0.08);
     border-left: 2px solid #00ff99;
     border-radius: 0 4px 4px 0;
     margin-bottom: 4px;
-    font-size: 0.65rem;
+    font-size: 0.75rem; /* Slightly larger text for better readability on wide screens */
     color: #eceff4;
 }
 
@@ -134,10 +149,11 @@
 }
 
 .task-section {
-  margin-top: 12px;
-  display: none;
-  padding-top: 10px;
-  border-top: 1px solid rgba(255,255,255,0.08);
+    margin-top: 12px;
+    padding: 10px 16px;
+    border-top: 1px solid rgba(255,255,255,0.08);
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .task-label {
