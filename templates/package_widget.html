@@ -1,0 +1,253 @@
+<!-- templates/package_widget.html -->
+<!-- Drop this file into your Flask templates folder.
+     Rendered via: render_template("package_widget.html", data=widget.widgetData) -->
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Sora:wght@300;500;600&display=swap" rel="stylesheet">
+
+<style>
+  .pkg-widget {
+    --pkg-bg:        #0c0d10;
+    --pkg-surface:   #13151a;
+    --pkg-border:    #22252e;
+    --pkg-text:      #dde1ec;
+    --pkg-muted:     #4a4f60;
+    --pkg-accent:    #38d9a9;   /* teal — "it's moving" */
+    --pkg-warn:      #ffd166;   /* amber — in transit */
+    --pkg-done:      #63e6be;   /* green — delivered */
+    --pkg-pending:   #748ffc;   /* indigo — pending */
+    --pkg-radius:    13px;
+    --pkg-font-ui:   'Sora', sans-serif;
+    --pkg-font-mono: 'Space Mono', monospace;
+
+    background: var(--pkg-bg);
+    border: 1px solid var(--pkg-border);
+    border-radius: var(--pkg-radius);
+    padding: 18px 18px 14px;
+    min-width: 280px;
+    max-width: 340px;
+    font-family: var(--pkg-font-ui);
+    color: var(--pkg-text);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.5);
+  }
+
+  /* ── Header ── */
+  .pkg-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 14px;
+  }
+
+  .pkg-title {
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--pkg-muted);
+  }
+
+  .pkg-icon {
+    font-size: 1.1rem;
+    line-height: 1;
+  }
+
+  /* ── Package card ── */
+  .pkg-list {
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+  }
+
+  .pkg-card {
+    background: var(--pkg-surface);
+    border: 1px solid var(--pkg-border);
+    border-radius: 9px;
+    padding: 11px 13px;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.2s;
+  }
+
+  .pkg-card::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 3px;
+    border-radius: 3px 0 0 3px;
+    background: var(--status-color, var(--pkg-muted));
+  }
+
+  /* Status colour vars applied per-card */
+  .pkg-card[data-status="In Transit"]       { --status-color: var(--pkg-warn); }
+  .pkg-card[data-status="Out for Delivery"] { --status-color: var(--pkg-accent); }
+  .pkg-card[data-status="Delivered"]        { --status-color: var(--pkg-done); }
+  .pkg-card[data-status="Pending"]          { --status-color: var(--pkg-pending); }
+
+  .pkg-card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 7px;
+  }
+
+  .pkg-label {
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--pkg-text);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 160px;
+  }
+
+  .pkg-status-badge {
+    font-family: var(--pkg-font-mono);
+    font-size: 0.58rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--status-color, var(--pkg-muted));
+    background: color-mix(in srgb, var(--status-color, var(--pkg-muted)) 12%, transparent);
+    padding: 3px 7px;
+    border-radius: 4px;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .pkg-meta {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+  }
+
+  .pkg-carrier {
+    font-family: var(--pkg-font-mono);
+    font-size: 0.6rem;
+    color: var(--pkg-muted);
+    letter-spacing: 0.05em;
+  }
+
+  .pkg-tracking {
+    font-family: var(--pkg-font-mono);
+    font-size: 0.58rem;
+    color: var(--pkg-muted);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 150px;
+  }
+
+  .pkg-eta-row {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin-top: 7px;
+  }
+
+  .pkg-eta-label {
+    font-size: 0.6rem;
+    color: var(--pkg-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  .pkg-eta-value {
+    font-size: 0.68rem;
+    font-weight: 500;
+    color: var(--status-color, var(--pkg-text));
+  }
+
+  .pkg-updated {
+    font-size: 0.57rem;
+    color: var(--pkg-muted);
+    margin-left: auto;
+    font-family: var(--pkg-font-mono);
+  }
+
+  /* ── Empty state ── */
+  .pkg-empty {
+    text-align: center;
+    padding: 20px 0 10px;
+    color: var(--pkg-muted);
+    font-size: 0.75rem;
+  }
+
+  .pkg-empty-icon {
+    font-size: 2rem;
+    display: block;
+    margin-bottom: 6px;
+    opacity: 0.4;
+  }
+
+  /* ── Add button ── */
+  .pkg-add-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    width: 100%;
+    margin-top: 12px;
+    padding: 9px;
+    background: transparent;
+    border: 1px dashed var(--pkg-border);
+    border-radius: 8px;
+    color: var(--pkg-muted);
+    font-family: var(--pkg-font-ui);
+    font-size: 0.7rem;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .pkg-add-btn:hover {
+    border-color: var(--pkg-accent);
+    color: var(--pkg-accent);
+    background: color-mix(in srgb, var(--pkg-accent) 6%, transparent);
+  }
+
+  /* ── Delivered strikethrough ── */
+  .pkg-card[data-status="Delivered"] .pkg-label {
+    text-decoration: line-through;
+    opacity: 0.55;
+  }
+</style>
+
+<div class="pkg-widget">
+  <div class="pkg-header">
+    <span class="pkg-title">Packages</span>
+    <span class="pkg-icon">📦</span>
+  </div>
+
+  <div class="pkg-list">
+    {% if data.packages %}
+      {% for pkg in data.packages %}
+        <div class="pkg-card" data-status="{{ pkg.status }}">
+          <div class="pkg-card-top">
+            <span class="pkg-label">{{ pkg.label }}</span>
+            <span class="pkg-status-badge">{{ pkg.status }}</span>
+          </div>
+          <div class="pkg-meta">
+            <span class="pkg-carrier">{{ pkg.carrier }}</span>
+            <span class="pkg-tracking">{{ pkg.tracking_number }}</span>
+          </div>
+          <div class="pkg-eta-row">
+            <span class="pkg-eta-label">ETA</span>
+            <span class="pkg-eta-value">{{ pkg.eta }}</span>
+            <span class="pkg-updated">Updated {{ pkg.last_update }}</span>
+          </div>
+        </div>
+      {% endfor %}
+    {% else %}
+      <div class="pkg-empty">
+        <span class="pkg-empty-icon">📭</span>
+        No packages being tracked
+      </div>
+    {% endif %}
+  </div>
+
+  <!-- Wire this button to your settings/command system to fire "add_package" -->
+  <button class="pkg-add-btn"
+          onclick="sendWidgetEvent('easha:packagewidget', 'add_package', {})">
+    + Track a package
+  </button>
+</div>
