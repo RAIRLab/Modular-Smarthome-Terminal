@@ -95,20 +95,6 @@ function addTask() {
         input.value = "";
 
         updateCalendar().then(() => {
-            setTimeout(() => {
-                const selected = document.querySelector(
-                    `.cal-day[data-date="${selectedDate}"]`
-                );
-
-                if (selected) {
-                    selected.click();
-
-                    // optional safety re-click
-                    setTimeout(() => {
-                        selected.click();
-                    }, 50);
-                }
-            }, 50);
         });
     });
 }
@@ -157,6 +143,28 @@ function editTask(id, date, oldTitle) {
 });
 }
 
+function changeMonth(direction) {
+    console.log("CLICKED:", direction);
+
+    fetch("/api/calendar/event", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            event: direction === "next" ? "next_month" : "prev_month"
+        })
+    })
+    .then(res => res.json())
+    .then(() => {
+        console.log("UPDATED MONTH");
+        return updateCalendar();
+    })
+    .catch(err => console.error("ERROR:", err));
+}
+
+window.changeMonth = changeMonth;
+
 //  ONLY ONE FUNCTION
 export async function updateCalendar() {
     try {
@@ -175,12 +183,7 @@ export async function updateCalendar() {
 
             attachCalendarListeners();
         }
-        setTimeout(() => {
-            const today = document.querySelector(".cal-day.today");
-            if (today) {
-                today.click(); 
-            }
-        }, 50);
+        
 
     } catch (error) {
         console.error('Calendar update failed:', error);

@@ -212,3 +212,26 @@
 .cal-event-item button:hover {
   color: white;
 }
+
+.cal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.cal-nav-btn {
+  background: transparent;
+  border: none;
+  color: #c084fc; /* purple */
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 6px 10px;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+}
+
+.cal-nav-btn:hover {
+  background: rgba(192, 132, 252, 0.15);
+  color: white;
+  transform: scale(1.2);
+}
