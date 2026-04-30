@@ -104,12 +104,11 @@ function addTask() {
     .then(() => {
         input.value = "";
         updateCalendar().then(() => {
-            // File 1 logic: Re-click the date so the new task appears immediately
             setTimeout(() => {
                 const selected = document.querySelector(`.cal-day[data-date="${selectedDate}"]`);
                 if (selected) {
                     selected.click();
-                    setTimeout(() => selected.click(), 50); // Safety re-click
+                    setTimeout(() => selected.click(), 50);
                 }
             }, 50);
         });
@@ -155,9 +154,22 @@ function editTask(id, date, oldTitle) {
     });
 }
 
-/**
- * Fetches the latest calendar HTML from the server and injects it.
- */
+
+function changeMonth(direction) {
+    fetch("/api/calendar/event", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+            event: direction === "next" ? "next_month" : "prev_month"
+        })
+    })
+    .then(res => res.json())
+    .then(() => updateCalendar())
+    .catch(err => console.error("ERROR:", err));
+}
+
+window.changeMonth = changeMonth;
+
 export async function updateCalendar() {
     try {
         const response = await fetch('/widget/calendar');
@@ -175,32 +187,16 @@ export async function updateCalendar() {
 
             attachCalendarListeners();
         }
+            // Default back to "Today" after background updates
+            setTimeout(() => {
+                const today = document.querySelector(".cal-day.today");
+                if (today) today.click(); 
+            }, 50);
 
-        // File 1 logic: Default back to "Today" after background updates
-        setTimeout(() => {
-            const today = document.querySelector(".cal-day.today");
-            if (today) today.click(); 
-        }, 50);
-
-    } catch (error) {
-        console.error('Calendar update failed:', error);
-    }
+                } catch (error) {
+                    console.error('Calendar update failed:', error);
+                }
 }
-
-function changeMonth(direction) {
-    fetch("/api/calendar/event", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-            event: direction === "next" ? "next_month" : "prev_month"
-        })
-    })
-    .then(res => res.json())
-    .then(() => updateCalendar())
-    .catch(err => console.error("ERROR:", err));
-}
-
-window.changeMonth = changeMonth;
 
 
 // Initialize on Load

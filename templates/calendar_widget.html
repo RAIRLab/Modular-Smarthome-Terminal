@@ -187,9 +187,20 @@
 
 <div class="cal-widget">
   <div class="cal-header">
-    <span class="cal-month-name">{{ data.month_name }}</span>
+
+  <!-- LEFT ARROW -->
+  <button class="cal-nav-btn" onclick="changeMonth('prev')">←</button>
+
+  <!-- MONTH + YEAR -->
+  <div style="text-align:center;">
+    <span class="cal-month-name">{{ data.month_name }}</span><br>
     <span class="cal-year">{{ data.year }}</span>
   </div>
+
+  <!-- RIGHT ARROW -->
+  <button class="cal-nav-btn" onclick="changeMonth('next')">→</button>
+
+</div>
 
   <div class="cal-grid">
     <!-- Day-of-week headers -->
@@ -214,30 +225,7 @@
     {% endfor %}
   </div>
 
-  <!-- Today's events -->
-  <!-- <div class="cal-events-section">
-    <div class="cal-events-title">Today</div>
-    {% set today_events = [] %}
-    {% for week in data.weeks %}
-      {% for day in week %}
-        {% if day.is_today and day.events %}
-          {% for e in day.events %}
-            {% set _ = today_events.append(e) %}
-          {% endfor %}
-        {% endif %}
-      {% endfor %}
-    {% endfor %}
-
-    {% if today_events %}
-      {% for event in today_events %}
-        <div class="cal-event-item">
-          <span>{{ event }}</span>
-        </div>
-      {% endfor %}
-    {% else %}
-      <div class="cal-no-events">No events today</div>
-    {% endif %}
-  </div> -->
+  
    <div class="cal-events-section">
     <div class="cal-events-title" id="eventsTitle">Select a day</div>
 
