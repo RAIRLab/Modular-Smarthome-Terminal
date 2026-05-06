@@ -16,3 +16,11 @@ updatePackages();
 import './plugins/fakeLight_script.js';
 
 import './plugins/blackjack_script.js'
+
+
+
+
+function getActiveClientId() {
+    return localStorage.getItem('client_id') || 'default_client';
+}
+

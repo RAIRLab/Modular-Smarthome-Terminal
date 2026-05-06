@@ -73,6 +73,25 @@ widgetIds.forEach(id => {
             if (el) el.innerHTML = html;
         });
 });
+
+
+
+// Capture client_id from Flask template variable or URL
+const urlParams = new URLSearchParams(window.location.search);
+const clientIdFromUrl = urlParams.get('client_id');
+
+if (clientIdFromUrl) {
+    initializeClient(clientIdFromUrl);
+}
+function initializeClient(clientId) {
+    if (clientId) {
+        localStorage.setItem('client_id', clientId);
+        console.log("Client session started for: " + clientId);
+    }
+}
+
+window.onload = () => { initializeClient("test")};
+
 </script>
 </body>
 

@@ -24,6 +24,13 @@ def setup():
                         col INTEGER,
                         FOREIGN KEY(client_id) REFERENCES clients(id),
                         FOREIGN KEY(widget_id) REFERENCES widgets(id))''')
+    cursor.execute('''CREATE TABLE IF NOT EXISTS widgetPrefs (
+                        client_id TEXT,
+                        widget_id TEXT,
+                        prefs TEXT, 
+                        FOREIGN KEY(client_id) REFERENCES clients(id),
+                        FOREIGN KEY(widget_id) REFERENCES widgets(id))''')
+    
     conn.commit()
     conn.close()
     print("...SQL Lite 3 SETUP COMPLETE")
