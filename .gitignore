@@ -3,5 +3,11 @@
 *.py[cod]
 *$py.class
 
-# Ignore Google tasks credentials
+
+# API and Authentication tokens
 SMTplugins/GoogleTasks/token.json
+token_cal.json
+SMTplugins/ArrivingToday/token.json
+
+# Cached calendar data
+calendar_events.json
