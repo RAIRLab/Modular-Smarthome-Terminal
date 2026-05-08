@@ -36,6 +36,23 @@ def setup():
     print("...SQL Lite 3 SETUP COMPLETE")
 
 
+def get_widget_preferences(client_id, widget_id):
+    try:
+        conn = sqlite3.connect('smt_database.db')
+        cursor = conn.cursor()
+        
+        query = """SELECT widgetPrefs WHERE client_id = ? AND widget_id = ?"""
+        pref = cursor.execute(query, (client_id, widget_id))
+        if(pref):
+            return pref
+    except sqlite3.Error as e:
+        print(f"An error occurred: {e}")
+    finally:
+        conn.close()
+        return None
+    
+    
+    
 def update_widget_preference(client_id, widget_id, new_prefs):
     try:
         conn = sqlite3.connect('smt_database.db')
