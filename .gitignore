@@ -8,6 +8,7 @@
 SMTplugins/GoogleTasks/token.json
 token_cal.json
 SMTplugins/ArrivingToday/token.json
+SMTplugins/Calendar/token_cal.json
 
 # Cached calendar data
 calendar_events.json

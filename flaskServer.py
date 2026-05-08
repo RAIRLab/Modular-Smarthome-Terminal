@@ -36,14 +36,15 @@ def run_flask():
 
 @app.route("/")
 def clientHomeStart():
-    # This could be from a database for now its json layout_client.json
+    return render_template('start_page.html')
+    '''# This could be from a database for now its json layout_client.json
     DATA_FILE = "layout_client.json"
     with open(DATA_FILE, 'r') as f:
         data = json.load(f)
     
     # Passes the list of widgets to the template
     return render_template('index.html', widgets=data['widgets'])
-    #return render_template("index.html")
+    #return render_template("index.html");'''
 
 
 @app.route("/<client_id>")
@@ -169,6 +170,66 @@ def save_prefs():
     conn.commit()
     conn.close()
     return jsonify({'message': 'Preferences updated successfully'})
+
+
+
+
+@app.route('/api/create_client', methods=['POST'])
+def create_client():
+    data = request.get_json()
+    client_id = data.get('client_id')
+    
+    if not client_id:
+        return jsonify({'error': 'Client ID is required'}), 400
+
+    try:
+        conn = sqlite3.connect('smt_database.db')
+        cursor = conn.cursor()
+
+        # Check if client already exists to avoid duplicates
+        cursor.execute("SELECT id FROM clients WHERE id = ?", (client_id,))
+        if cursor.fetchone():
+            conn.close()
+            return jsonify({'message': 'Client already exists', 'client_id': client_id}), 200
+
+        # Insert the new client into the clients table
+        # Note: 'name' is set to the ID as a default if your table requires a name
+        cursor.execute("INSERT INTO clients (id, name) VALUES (?, ?)", (client_id, client_id))
+        
+        conn.commit()
+        conn.close()
+        return jsonify({'message': 'Client created successfully', 'client_id': client_id}), 201
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+    
+
+@app.route('/api/rename_client', methods=['POST'])
+def rename_client():
+    data = request.get_json()
+    client_id = data.get('client_id')
+    new_name = data.get('new_name')
+    
+    conn = sqlite3.connect('smt_database.db')
+    cursor = conn.cursor()
+    cursor.execute("UPDATE clients SET name = ? WHERE id = ?", (new_name, client_id))
+    conn.commit()
+    conn.close()
+    return jsonify({"status": "success"})
+
+@app.route('/api/delete_client', methods=['POST'])
+def delete_client():
+    data = request.get_json()
+    client_id = data.get('client_id')
+    
+    conn = sqlite3.connect('smt_database.db')
+    cursor = conn.cursor()
+    # Remove client and their specific layout settings
+    cursor.execute("DELETE FROM clients WHERE id = ?", (client_id,))
+    cursor.execute("DELETE FROM client_layouts WHERE client_id = ?", (client_id,))
+    cursor.execute("DELETE FROM widgetPrefs WHERE client_id = ?", (client_id,))
+    conn.commit()
+    conn.close()
+    return jsonify({"status": "success"})
 
 # Slated for removal-- starting through start.py now
 if __name__ == '__main__':

@@ -22,7 +22,7 @@ import './plugins/blackjack_script.js'
 
 
 
-function getActiveClientId() {
+async function getActiveClientId() {
     return localStorage.getItem('client_id') || 'default_client';
 }
 
