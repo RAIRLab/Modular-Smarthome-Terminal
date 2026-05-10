@@ -4,6 +4,9 @@ from SMTplugins.GoogleTasks.googleTasks_widget import GoogleTasksWidget
 googleTasks_bp = Blueprint('googleTasks_bp', __name__)
 tasks = GoogleTasksWidget()
 
+def get_blueprint():
+    return googleTasks_bp
+
 @googleTasks_bp.route("/api/google/tasks")
 def get_google_tasks():
     data = tasks.update()
@@ -16,7 +19,7 @@ def get_google_tasks():
 def complete_task():
     data = request.get_json()
     task_id = data.get('task_id')
-    
+
     if not task_id:
         return jsonify({"error": "No task ID provided"}), 400
 
@@ -28,11 +31,11 @@ def complete_task():
         # Use patch to update the status to 'completed'
         # Google requires the task ID and the '@default' list ID
         service.tasks().patch(
-            tasklist='@default', 
-            task=task_id, 
+            tasklist='@default',
+            task=task_id,
             body={'status': 'completed'}
         ).execute()
-        
+
         return jsonify({"status": "success", "message": "Task marked as completed"})
 
     except Exception as e:

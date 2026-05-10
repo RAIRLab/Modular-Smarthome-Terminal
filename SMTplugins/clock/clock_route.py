@@ -3,6 +3,9 @@ from flask import jsonify, Blueprint
 
 clock_bp = Blueprint('clock', __name__)
 
+def get_blueprint():
+    return clock_bp
+
 @clock_bp.route("/time")
 def get_time():
     clock = clockWidget()

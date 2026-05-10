@@ -6,6 +6,9 @@ from SMTplugins.Package.packageWidget import packageWidget
 
 package_bp = Blueprint('package', __name__)
 
+def get_blueprint():
+    return package_bp
+
 _widget = packageWidget()
 
 

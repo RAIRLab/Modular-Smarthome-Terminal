@@ -7,6 +7,9 @@ import pytz
 timeZone_bp = Blueprint('timeZone_bp', __name__)
 DATA_FILE = os.path.join("SMTplugins", "TimeZoneClock", "locations.json")
 
+def get_blueprint():
+    return timeZone_bp
+
 @timeZone_bp.route("/api/timezone/data")
 def get_location_times():
     output = []
@@ -27,5 +30,5 @@ def get_location_times():
                         })
         except Exception as e:
             return jsonify({"error": str(e)}), 500
-    
+
     return jsonify(output)

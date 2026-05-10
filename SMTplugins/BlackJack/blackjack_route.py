@@ -3,6 +3,9 @@ import random
 from SMTplugins.BlackJack.blackjack_widget import BlackjackWidget
 blackjack_bp = Blueprint('blackjack_bp', __name__)
 
+def get_blueprint():
+    return blackjack_bp
+
 SUITS = ['hearts', 'diamonds', 'spades', 'clubs']
 VALUES = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K']
 
@@ -37,11 +40,11 @@ def stand():
     data = request.json
     deck = data.get('deck', [])
     dealer_hand = data.get('dealer_hand', [])
-    
+
     # Dealer must hit until score >= 17
     while get_score(dealer_hand) < 17:
         dealer_hand.append(deck.pop())
-        
+
     return jsonify({
         "dealer_hand": dealer_hand,
         "remaining_deck": deck,

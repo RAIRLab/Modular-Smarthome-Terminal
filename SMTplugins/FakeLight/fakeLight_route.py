@@ -3,6 +3,9 @@ from SMTplugins.FakeLight.fakeLight_widget import FakeLightWidget
 
 fakeLight_bp = Blueprint('fakeLight', __name__)
 
+def get_blueprint():
+    return fakeLight_bp
+
 light_instance = FakeLightWidget()
 
 @fakeLight_bp.route('/api/light/status', methods=['GET'])

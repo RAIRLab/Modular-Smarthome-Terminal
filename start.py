@@ -25,11 +25,6 @@ def start():
     sqlThread.start()
     pluginsThread.start()
     flaskServer.run_flask()
-    # Flask thread has to be run on the main thread because of signal
-    #flaskServer.thread()
-
-    # NOTE - Im gonna be kicking the can further down the road with this one but as it stands the way python threading works is
-    # really silly, so I'm gonna remove all the debug loops and figure out how to kill all processes cleanly on exit at a later date.
 
 # Perform setup operations
 def setup():

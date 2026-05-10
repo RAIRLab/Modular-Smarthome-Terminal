@@ -1,6 +1,8 @@
 from flask import Flask, render_template, request, jsonify
 import os
+import sys
 import json
+import importlib
 
 '''from SMTplugins.pluginImports import *
 from SMTplugins.Calendar.calendar_plugin import calendar_bp
@@ -12,27 +14,51 @@ from flask import jsonify
 import os
 import json
 
-from SMTplugins.pluginImports import *
-from SMTplugins.Calendar.calendar_plugin import calendar_bp
-from SMTplugins.Package.package_plugin import package_bp
-
 app = Flask(__name__)
 
 
 
 #######PLUGINS#######
-app.register_blueprint(clock_bp)
-app.register_blueprint(fTemp_bp)
-app.register_blueprint(weather_bp)
-app.register_blueprint(timeZone_bp)
-app.register_blueprint(date_bp)
-app.register_blueprint(blackjack_bp) #Blackjack
-app.register_blueprint(googleTasks_bp)
-app.register_blueprint(spotify_bp)
-app.register_blueprint(calendar_bp)
-app.register_blueprint(package_bp)
-app.register_blueprint(fakeLight_bp)
+# IMPORTANT - Every bp file must have a function called get_blueprint() that returns the blueprint to be registered
+# ALSO!!!! FOR SOME REASON YOU CANT USE FROM X IMPORT Y. ONLY USE "IMPORT Y" WHEN MAKING WIDGETS
+# Recursive function that searches for all .py files in the filepath, including all subfolders in the path
+def deep_search_for_module_blueprints(filepath):
+    returnList = []
+    specList = []
 
+    for filename in os.listdir(filepath):
+        current_filepath = filepath + "\\" + filename
+
+        # If we found a directory, recursively search it for plugins
+        if os.path.isdir(current_filepath) and filename != "__pycache__":
+            recur_returnList, recur_specList = deep_search_for_module_blueprints(current_filepath)
+            returnList.extend(recur_returnList)
+            specList.extend(recur_specList)
+
+        # If we found a module, lazily import it
+        elif filename.endswith('.py'):
+            print("Importing " + current_filepath)
+
+            module_name = filename[:-3]
+            spec = importlib.util.spec_from_file_location(module_name, (current_filepath))
+            module = importlib.util.module_from_spec(spec)
+            sys.modules[module_name] = module_name
+            returnList.append(module)
+            specList.append(spec)
+
+    return returnList, specList
+
+# Retrieve our potential blueprints and specs
+potential_bps, specList = deep_search_for_module_blueprints(os.getcwd() + "\\SMTplugins")
+
+# Actually perform the code executions in our imported modules
+for i in range(0, len(potential_bps)):
+    specList[i].loader.exec_module(potential_bps[i])
+
+for potential_bp in potential_bps:
+    bp_call = getattr(potential_bp, "get_blueprint", None)
+    if bp_call != None:
+        app.register_blueprint(bp_call())
 
 
 #allows for easier starting of flask from start file
@@ -47,11 +73,11 @@ def clientHome():
     DATA_FILE = "layout_client.json"
     with open(DATA_FILE, 'r') as f:
         data = json.load(f)
-    
+
     # Passes the list of widgets to the template
     return render_template('index.html', widgets=data['widgets'])
     #return render_template("index.html")
-  
+
 @app.route("/settings")
 def settings():
     return render_template("settingspage.html")

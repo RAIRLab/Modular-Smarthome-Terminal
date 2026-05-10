@@ -5,7 +5,10 @@ import requests
 # Blueprint for Spotify
 spotify_bp = Blueprint("spotify_bp", __name__)
 
-# Spotify API credentials that are needed 
+def get_blueprint():
+    return spotify_bp
+
+# Spotify API credentials that are needed
 CLIENT_ID = "f77a81fa784b46d6a3513a1fddbd3a2f"
 CLIENT_SECRET = "8ea40647f6c34ed7bae3afa7c5e1a267"
 REDIRECT_URI = "http://127.0.0.1:5000/callback"
@@ -23,7 +26,7 @@ def get_auth_header():
     return {"Authorization": f"Basic {auth_base64}"}
 
 
-# Creates a bearer token header for the API calls 
+# Creates a bearer token header for the API calls
 def get_bearer_header():
     return {"Authorization": f"Bearer {access_token}"}
 
@@ -52,7 +55,7 @@ def refresh_access_token():
     return True
 
 
-# Route needed to redirect user to Spotify login page 
+# Route needed to redirect user to Spotify login page
 @spotify_bp.route("/login")
 def spotify_login():
     scope = "user-read-currently-playing user-modify-playback-state"
@@ -66,7 +69,7 @@ def spotify_login():
     return redirect(auth_url)
 
 
-# Call back route after Spotify login 
+# Call back route after Spotify login
 @spotify_bp.route("/callback")
 def spotify_callback():
     global access_token, refresh_token
@@ -113,13 +116,13 @@ def get_spotify():
             "isPlaying": False
         })
 
-    # Request current playback 
+    # Request current playback
     response = requests.get(
         "https://api.spotify.com/v1/me/player/currently-playing",
         headers=get_bearer_header()
     )
 
-    # This is when no song is playing 
+    # This is when no song is playing
     if response.status_code == 204:
         return jsonify({
             "track": "Nothing Playing",

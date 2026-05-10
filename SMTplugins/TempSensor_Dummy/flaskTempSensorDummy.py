@@ -5,12 +5,15 @@ import json
 
 fTemp_bp = Blueprint('FakeTeperature', __name__)
 
+def get_blueprint():
+    return fTemp_bp
+
 DATA_FILE = "SMTplugins/TempSensor_Dummy/sensor_data.json"
 
 @fTemp_bp.route("/temperature")
 def get_temp():
     current_val = "NAN "
-    
+
     # Check if the file exists before trying to read it
     if os.path.exists(DATA_FILE):
         try:
@@ -22,7 +25,7 @@ def get_temp():
 
     # Pass the value to Widget Subsystem
     temp_widget = tempSensorWidget()
-    temp_widget.updateTemp(current_val) 
+    temp_widget.updateTemp(current_val)
     return jsonify({"temp": temp_widget.update()})
 
     #FOR HOME ASSISTANT UNTESTED

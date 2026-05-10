@@ -7,6 +7,9 @@ import json
 weather_bp = Blueprint('weather_bp', __name__)
 geolocator = Nominatim(user_agent="SMT_Terminal_Project")
 
+def get_blueprint():
+    return weather_bp
+
 # NWS requires a unique User-Agent header
 HEADERS = {
     'User-Agent': '(SMT-Project, bschadoff@albany.edu)',
@@ -32,21 +35,21 @@ def get_nws_weather():
         location = geolocator.geocode(city)
         if not location:
             return jsonify({"error": "City not found"}), 404
-        
+
         lat, lon = location.latitude, location.longitude
 
         # 2) Resolve coordinates to NWS Grid Points
         points_url = f"https://api.weather.gov/points/{lat},{lon}"
         points_res = requests.get(points_url, headers=HEADERS)
         points_res.raise_for_status()
-        
+
         # 3) Get the Hourly Forecast URL
         forecast_url = points_res.json()['properties']['forecastHourly']
         forecast_res = requests.get(forecast_url, headers=HEADERS)
         forecast_res.raise_for_status()
-        
+
         periods = forecast_res.json()['properties']['periods']
-        
+
         # Current data is the first period
         current = periods[0]
         # Calculate H/L by looking at the next 24 hourly periods

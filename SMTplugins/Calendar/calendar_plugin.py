@@ -8,6 +8,9 @@ calendar_bp = Blueprint('calendar', __name__)
 _widget = calendarWidget()
 _widget.update()
 
+def get_blueprint():
+    return calendar_bp
+
 @calendar_bp.route("/widget/calendar")
 def calendar_view():
     return render_template("calendar_widget.html", data=_widget.widgetData)

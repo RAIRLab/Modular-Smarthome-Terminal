@@ -3,6 +3,9 @@ from datetime import datetime
 
 date_bp = Blueprint("date_bp", __name__)
 
+def get_blueprint():
+    return date_bp
+
 @date_bp.route("/api/date")
 def get_date():
     now = datetime.now()
