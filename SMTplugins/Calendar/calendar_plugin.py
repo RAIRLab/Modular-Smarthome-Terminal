@@ -10,6 +10,7 @@ _widget.update()
 
 @calendar_bp.route("/widget/calendar")
 def calendar_view():
+    print("RENDERING MONTH:", _widget.current_date)  # debug
     return render_template("calendar_widget.html", data=_widget.widgetData)
 
 @calendar_bp.route("/api/calendar/data")
